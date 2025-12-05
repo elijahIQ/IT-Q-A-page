@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Try-Out Questions</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+    }
+    header {
+        background: #003366;
+        padding: 15px;
+        color: white;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    #timer {
+        background: #222;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+    }
+    .container {
+        width: 95%;
+        max-width: 900px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+    }
+    .question-box {
+        padding: 15px;
+        background: #eef3fa;
+        border-left: 5px solid #003366;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    button {
+        padding: 12px 20px;
+        background: #003366;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0055aa;
+    }
+    #submitBtn {
+        width: 100%;
+        margin-top: 25px;
+        background: #008800;
+    }
+    #result {
+        display: none;
+        padding: 20px;
+        background: #d8ffd8;
+        border-left: 5px solid #009933;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 20px;
+    }
+    .correct-answer {
+        color: green;
+        font-weight: bold;
+    }
+    .incorrect-answer {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<header>Database Try-Out Questions</header>
+<div id="timer">Time Left: <span id="time">15:00</span></div>
+
+<div class="container">
+
+    <div id="questionContainer"></div>
+
+    <div class="nav-buttons">
+        <button onclick="prevQuestion()">Previous</button>
+        <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <button id="submitBtn" onclick="submitQuiz()">Submit Answers</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+/* ───────────────────────────────────────────
+     50 DATABASE + IT QUESTIONS
+──────────────────────────────────────────── */
+let questions = [
+    {q:"What does SQL stand for?",o:["Strong Question Language","Structured Query Language","Statement Query Logic","Sequence Query Level"],a:1},
+    {q:"What is a database?",o:["A collection of related data","A type of software","Computer hardware","A programming language"],a:0},
+    {q:"Which command retrieves data?",o:["DELETE","UPDATE","SELECT","INSERT"],a:2},
+    {q:"A table row is also called?",o:["Field","Record","Attribute","Entity"],a:1},
+    {q:"A table column is called?",o:["Field","Tuple","Relation","Module"],a:0},
+    {q:"DBMS stands for?",o:["Database Managing Software","Data Base Management System","Data Backup Main Storage","Digital Base Model System"],a:1},
+    {q:"Primary key must be?",o:["Duplicate","Null","Unique","Text only"],a:2},
+    {q:"Which is a type of database model?",o:["Hierarchical","Vertical","Spiral","Layer"],a:0},
+    {q:"Which is NOT a DBMS?",o:["MySQL","Oracle","MongoDB","HTML"],a:3},
+    {q:"What is data redundancy?",o:["Storing data twice","Storing data once","Deleting data","Encrypting data"],a:0},
+
+    // 40 MORE QUESTIONS ↓↓↓
+    {q:"Which SQL keyword sorts data?",o:["ORDER BY","GROUP BY","SORT","RANK"],a:0},
+    {q:"Which SQL clause filters rows?",o:["SELECT","WHERE","FROM","ORDER"],a:1},
+    {q:"Which SQL function counts rows?",o:["TOTAL()","SUM()","COUNT()","ADD()"],a:2},
+    {q:"Which is a NoSQL database?",o:["MongoDB","MySQL","MariaDB","PostgreSQL"],a:0},
+    {q:"ER stands for?",o:["Entity Relationship","Entry Record","Event Response","Error Report"],a:0},
+    {q:"Which is NOT a data type?",o:["INT","VARCHAR","DATE","PAGE"],a:3},
+    {q:"Which symbol represents a cardinality?",o:["*","∞","1","→"],a:2},
+    {q:"Which normal form removes partial dependency?",o:["1NF","2NF","3NF","BCNF"],a:1},
+    {q:"SQL INSERT adds?",o:["Columns","Rows","Tables","Users"],a:1},
+    {q:"SQL DELETE removes?",o:["Table","Row","Database","Column"],a:1},
+    {q:"Which is OLAP used for?",o:["Transactions","Analysis","Backup","Formatting"],a:1},
+    {q:"Which is OLTP used for?",o:["Analytics","Batch processing","Real-time transactions","Backup"],a:2},
+    {q:"What is a schema?",o:["Data layout","Table row","Query","Program"],a:0},
+    {q:"A foreign key links?",o:["Tables","Columns","Files","Programs"],a:0},
+    {q:"What ensures data accuracy?",o:["Integrity","Backup","Formatting","Replication"],a:0},
+    {q:"Which SQL joins all rows?",o:["INNER JOIN","LEFT JOIN","RIGHT JOIN","FULL JOIN"],a:3},
+    {q:"What does NULL mean?",o:["Empty string","Zero","Unknown/missing","False"],a:2},
+    {q:"Which is a constraint?",o:["SELECT","DEFAULT","UPDATE","USE"],a:1},
+    {q:"Which keyword removes duplicates?",o:["UNIQUE","ONLY","DISTINCT","CLEAN"],a:2},
+    {q:"Which backup copies entire DB?",o:["Full","Partial","Differential","Incremental"],a:0},
+    {q:"Which is a cloud database?",o:["Azure SQL","Oracle","PostgreSQL","SQLite"],a:0},
+    {q:"MySQL is a ___ database.",o:["Graph","Relational","Hierarchical","Document"],a:1},
+    {q:"MongoDB stores data as?",o:["Tables","Rows","JSON-like documents","HTML"],a:2},
+    {q:"Which SQL keyword groups rows?",o:["GROUP BY","ORDER","MERGE","SET"],a:0},
+    {q:"Which function returns max value?",o:["HIGHEST()","MAX()","TOP()","LARGEST()"],a:1},
+    {q:"ACID ensures?",o:["Backup","Transactions reliability","Data display","Indexing"],a:1},
+    {q:"Index improves?",o:["Storage","Speed","Security","Design"],a:1},
+    {q:"Which prevents unauthorized access?",o:["Integrity","Security","Indexing","JOIN"],a:1},
+    {q:"Which stores metadata?",o:["Data dictionary","Index","Table","Backup"],a:0},
+    {q:"Stored procedures are?",o:["Queries","Programs in DB","Tables","Rows"],a:1},
+    {q:"Trigger executes when?",o:["User logs in","Event occurs","Machine boots","Query fails"],a:1},
+    {q:"SQL UPDATE modifies?",o:["Database","Rows","Tables","Columns only"],a:1},
+    {q:"Which is a relationship type?",o:["1:1","1:2","1:4","2:3"],a:0},
+    {q:"MySQL uses?",o:["Python","SQL","Ruby","Bash"],a:1},
+    {q:"Which stores large text?",o:["INT","FLOAT","TEXT","NUMBER"],a:2},
+    {q:"Which means structured data?",o:["Tables","Images","Videos","Audio"],a:0},
+    {q:"Which means unstructured data?",o:["Excel","Tables","Text & Images","SQL"],a:2},
+    {q:"Which command creates table?",o:["MAKE TABLE","NEW TABLE","CREATE TABLE","BUILD TABLE"],a:2},
+    {q:"Which SQL operator matches pattern?",o:["LIKE","MATCH","SEARCH","COMPARE"],a:0},
+    {q:"DB transaction begins with?",o:["RUN","BEGIN","START","ENTER"],a:1},
+    {q:"Rollback means?",o:["Save","Undo","Store","Complete"],a:1},
+    {q:"Commit means?",o:["Undo","Lock","Save permanently","Pause"],a:2}
+];
+
+/* ─────────────────────────
+    RANDOMIZE QUESTIONS
+─────────────────────────── */
+questions = questions.sort(() => Math.random() - 0.5);
+
+let currentIndex = 0;
+
+/* ─────────────────────────
+    DISPLAY QUESTION
+─────────────────────────── */
+function showQuestion() {
+    let q = questions[currentIndex];
+    let container = document.getElementById("questionContainer");
+
+    container.innerHTML = `
+        <div class="question-box">
+            <p><b>${currentIndex + 1}. ${q.q}</b></p>
+            ${q.o.map((opt, i) =>
+                `<label><input type="radio" name="q${currentIndex}" value="${i}"> ${opt}</label><br>`
+            ).join("")}
+        </div>
+    `;
+}
+showQuestion();
+
+/* ─────────────────────────
+    NEXT / PREVIOUS BUTTONS
+─────────────────────────── */
+function nextQuestion() {
+    if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        showQuestion();
+    }
+}
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+    }
+}
+
+/* ─────────────────────────
+    SUBMIT + SHOW CORRECT ANSWERS
+─────────────────────────── */
+function submitQuiz() {
+    let score = 0;
+    let details = "";
+
+    questions.forEach((q, index) => {
+        let selected = document.querySelector(`input[name="q${index}"]:checked`);
+        let userAnswer = selected ? parseInt(selected.value) : -1;
+
+        if (userAnswer === q.a) score++;
+
+        details += `
+            <p>
+                <b>${index + 1}. ${q.q}</b><br>
+                <span class="${userAnswer === q.a ? 'correct-answer' : 'incorrect-answer'}">
+                    Your answer: ${userAnswer === -1 ? "No answer" : q.o[userAnswer]}
+                </span><br>
+                <span class="correct-answer">Correct answer: ${q.o[q.a]}</span>
+            </p><hr>
+        `;
+    });
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").innerHTML =
+        `<h2>Your Score: ${score} / ${questions.length}</h2><br>${details}`;
+}
+
+/* ─────────────────────────
+           TIMER
+─────────────────────────── */
+let timeLeft = 15 * 60; // 15 minutes
+
+function countdown() {
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+
+    document.getElementById("time").innerHTML =
+        `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+    if (timeLeft <= 0) {
+        submitQuiz();
+        document.getElementById("timer").style.background = "red";
+        return;
+    }
+
+    timeLeft--;
+    setTimeout(countdown, 1000);
+}
+countdown();
+</script>
+
+</body>
+</html>

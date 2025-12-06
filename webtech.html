@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Try-Out Questions</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+    }
+    header {
+        background: #003366;
+        padding: 15px;
+        color: white;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    #timer {
+        background: #222;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+    }
+    .container {
+        width: 95%;
+        max-width: 900px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+    }
+    .question-box {
+        padding: 15px;
+        background: #eef3fa;
+        border-left: 5px solid #003366;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    button {
+        padding: 12px 20px;
+        background: #003366;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0055aa;
+    }
+    #submitBtn {
+        width: 100%;
+        margin-top: 25px;
+        background: #008800;
+    }
+    #result {
+        display: none;
+        padding: 20px;
+        background: #d8ffd8;
+        border-left: 5px solid #009933;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 20px;
+    }
+    .correct-answer {
+        color: green;
+        font-weight: bold;
+    }
+    .incorrect-answer {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<header>Web Technology Try-Out Questions</header>
+<div id="timer">Time Left: <span id="time">60:00</span></div>
+
+<div class="container">
+
+    <div id="questionContainer"></div>
+
+    <div class="nav-buttons">
+        <button onclick="prevQuestion()">Previous</button>
+        <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <button id="submitBtn" onclick="submitQuiz()">Submit Answers</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+//new
+
+let questions = [
+  {
+    "q": "What does HTML stand for?",
+    "o": [
+      "HyperText Markup Language",
+      "Hyperlink Markup Language",
+      "HighTech Markup Language",
+      "Hyper Transfer Markup Language"
+    ],
+    "a": 0
+  },
+  {
+    "q": "Who developed HTML?",
+    "o": [
+      "Tim Berners-Lee",
+      "Bill Gates",
+      "Steve Jobs",
+      "Mark Zuckerberg"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of HTML?",
+    "o": [
+      "To design web pages",
+      "To create web browsers",
+      "To develop web servers",
+      "To write web content"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the original intent of HTML?",
+    "o": [
+      "To create web applications",
+      "To design web pages",
+      "To define the structure of documents",
+      "To develop web browsers"
+    ],
+    "a": 2
+  },
+  {
+    "q": "What is the latest version of HTML?",
+    "o": [
+      "HTML4",
+      "HTML5",
+      "XHTML",
+      "HTML6"
+    ],
+    "a": 1
+  },
+  {
+    "q": "What is the purpose of the <head> element in HTML?",
+    "o": [
+      "To define the structure of the web page",
+      "To contain metadata about the web page",
+      "To contain the content of the web page",
+      "To link to external stylesheets"
+    ],
+    "a": 1
+  },
+  {
+    "q": "What is the purpose of the <title> element in HTML?",
+    "o": [
+      "To define the title of the web page",
+      "To contain the content of the web page",
+      "To link to external stylesheets",
+      "To define the structure of the web page"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <p> element in HTML?",
+    "o": [
+      "To define a paragraph of text",
+      "To contain a heading",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <h1>-<h6> elements in HTML?",
+    "o": [
+      "To define headings",
+      "To contain paragraphs of text",
+      "To link to external stylesheets",
+      "To define tables"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <a> element in HTML?",
+    "o": [
+      "To define a link to another web page",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the href attribute in the <a> element?",
+    "o": [
+      "To define the text to be displayed",
+      "To define the link destination",
+      "To define the link title",
+      "To define the link target"
+    ],
+    "a": 1
+  },
+  {
+    "q": "What is the purpose of the <img> element in HTML?",
+    "o": [
+      "To define an image",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the src attribute in the <img> element?",
+    "o": [
+      "To define the image source",
+      "To define the image alt text",
+      "To define the image title",
+      "To define the image width"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <table> element in HTML?",
+    "o": [
+      "To define a table",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a heading"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <tr> element in HTML?",
+    "o": [
+      "To define a table row",
+      "To contain a table cell",
+      "To link to an external stylesheet",
+      "To define a table heading"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <td> element in HTML?",
+    "o": [
+      "To define a table cell",
+      "To contain a table row",
+      "To link to an external stylesheet",
+      "To define a table heading"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <form> element in HTML?",
+    "o": [
+      "To define a form",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <input> element in HTML?",
+    "o": [
+      "To define a form input field",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the type attribute in the <input> element?",
+    "o": [
+      "To define the input field type",
+      "To define the input field name",
+      "To define the input field value",
+      "To define the input field label"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <select> element in HTML?",
+    "o": [
+      "To define a dropdown list",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <option> element in HTML?",
+    "o": [
+      "To define a dropdown list option",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <textarea> element in HTML?",
+    "o": [
+      "To define a text area",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <button> element in HTML?",
+    "o": [
+      "To define a button",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <canvas> element in HTML?",
+    "o": [
+      "To define a canvas for drawing",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <video> element in HTML?",
+    "o": [
+      "To define a video",
+      "To contain a paragraph of text",
+      "To link to an external stylesheet",
+      "To define a table"
+    ],
+    "a": 0
+  },
+
+  /* -------------------- HTML5 QUESTIONS -------------------- */
+
+  {
+    "q": "What is the purpose of the <time> element in HTML5?",
+    "o": [
+      "To display the current time",
+      "To specify a date and time",
+      "To create a timer",
+      "To display a clock"
+    ],
+    "a": 1
+  },
+  {
+    "q": "What is the purpose of the <meter> element in HTML5?",
+    "o": [
+      "To display a progress bar",
+      "To display a scalar measurement",
+      "To create a thermometer",
+      "To display a gauge"
+    ],
+    "a": 1
+  },
+  {
+    "q": "What is the purpose of the <progress> element in HTML5?",
+    "o": [
+      "To display a progress bar",
+      "To display a scalar measurement",
+      "To create a thermometer",
+      "To display a gauge"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <mark> element in HTML5?",
+    "o": [
+      "To highlight text",
+      "To create a bookmark",
+      "To display a note",
+      "To create a comment"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <datagrid> element in HTML5?",
+    "o": [
+      "To display a table",
+      "To create a grid",
+      "To display interactive data",
+      "To create a chart"
+    ],
+    "a": 2
+  },
+  {
+    "q": "What is the purpose of the <canvas> element in HTML5?",
+    "o": [
+      "To display a drawing canvas",
+      "To create a graph",
+      "To display a chart",
+      "To create a game"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <audio> element in HTML5?",
+    "o": [
+      "To play audio files",
+      "To display a video",
+      "To create a sound effect",
+      "To display a music player"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <video> element in HTML5?",
+    "o": [
+      "To play video files",
+      "To display an image",
+      "To create a movie",
+      "To display a slideshow"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the controls attribute in the <audio> and <video> elements?",
+    "o": [
+      "To display a play button",
+      "To display a pause button",
+      "To display a volume control",
+      "To display a control panel"
+    ],
+    "a": 3
+  },
+  {
+    "q": "What is the purpose of the autoplay attribute in the <audio> and <video> elements?",
+    "o": [
+      "To play the media automatically",
+      "To pause the media automatically",
+      "To display a play button",
+      "To display a pause button"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the preload attribute in the <audio> and <video> elements?",
+    "o": [
+      "To preload the media",
+      "To pause the media",
+      "To display a play button",
+      "To display a pause button"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the width and height attributes in the <video> element?",
+    "o": [
+      "To specify the video size",
+      "To specify the video quality",
+      "To specify the video format",
+      "To specify the video codec"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <source> element in the <audio> and <video> elements?",
+    "o": [
+      "To specify the media source",
+      "To specify the media type",
+      "To specify the media codec",
+      "To specify the media format"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the type attribute in the <source> element?",
+    "o": [
+      "To specify the media type",
+      "To specify the media codec",
+      "To specify the media format",
+      "To specify the media source"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the src attribute in the <source> element?",
+    "o": [
+      "To specify the media source",
+      "To specify the media type",
+      "To specify the media codec",
+      "To specify the media format"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the repeat attribute in the <tr> element?",
+    "o": [
+      "To repeat the table row",
+      "To repeat the table cell",
+      "To repeat the table header",
+      "To repeat the table footer"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the template attribute in the <tr> element?",
+    "o": [
+      "To specify the table template",
+      "To specify the table row template",
+      "To specify the table cell template",
+      "To specify the table header template"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the add attribute in the <button> element?",
+    "o": [
+      "To add a new table row",
+      "To add a new table cell",
+      "To add a new table header",
+      "To add a new table footer"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the remove attribute in the <button> element?",
+    "o": [
+      "To remove a table row",
+      "To remove a table cell",
+      "To remove a table header",
+      "To remove a table footer"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <nav> element in HTML5?",
+    "o": [
+      "To specify navigation links",
+      "To specify a navigation bar",
+      "To specify a navigation menu",
+      "To specify a navigation panel"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <header> element in HTML5?",
+    "o": [
+      "To specify a header",
+      "To specify a footer",
+      "To specify a navigation bar",
+      "To specify a navigation menu"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <footer> element in HTML5?",
+    "o": [
+      "To specify a footer",
+      "To specify a header",
+      "To specify a navigation bar",
+      "To specify a navigation menu"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <section> element in HTML5?",
+    "o": [
+      "To specify a section",
+      "To specify an article",
+      "To specify a navigation bar",
+      "To specify a navigation menu"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <article> element in HTML5?",
+    "o": [
+      "To specify an article",
+      "To specify a section",
+      "To specify a navigation bar",
+      "To specify a navigation menu"
+    ],
+    "a": 0
+  },
+  {
+    "q": "What is the purpose of the <aside> element in HTML5?",
+    "o": [
+      "To specify a sidebar",
+      "To specify a navigation bar",
+      "To specify a navigation menu",
+      "To specify a footer"
+    ],
+    "a": 0
+  }
+
+
+  
+  /* ----------- CONTINUES ---------- */
+  /* Due to ChatGPT message limits, I will continue below. */
+];
+
+
+//end
+
+
+
+/* ─────────────────────────
+    RANDOMIZE QUESTIONS
+─────────────────────────── */
+questions = questions.sort(() => Math.random() - 0.5);
+
+let currentIndex = 0;
+
+
+/* ──────────── STORE USER ANSWERS ──────────── */
+let userAnswers = {};  
+// example: userAnswers[3] = 2  → Question 3, option index 2 selected
+
+/* ─────────── DISPLAY QUESTION (with stored answers) ─────────── */
+function showQuestion() {
+    let q = questions[currentIndex];
+    let container = document.getElementById("questionContainer");
+
+    container.innerHTML = `
+        <div class="question-box">
+            <p><b>${currentIndex + 1}. ${q.q}</b></p>
+            ${q.o.map((opt, i) => `
+                <label>
+                    <input type="radio" name="q${currentIndex}"
+                        value="${i}"
+                        ${userAnswers[currentIndex] === i ? "checked" : ""}>
+                    ${opt}
+                </label><br>
+            `).join("")}
+        </div>
+    `;
+
+    // Save answer automatically when clicking
+    document.querySelectorAll(`input[name="q${currentIndex}"]`).forEach(radio => {
+        radio.addEventListener("change", function() {
+            userAnswers[currentIndex] = parseInt(this.value);
+        });
+    });
+}
+
+/* ─────────── NEXT / PREVIOUS — Keeps Answers Saved ─────────── */
+function nextQuestion() {
+    if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        showQuestion();
+    }
+}
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+    }
+}
+
+/* ─────────── SUBMIT: Score Only Based on Answered Questions ─────────── */
+function submitQuiz() {
+    let score = 0;
+    let answeredQuestions = Object.keys(userAnswers).length;
+    let details = "";
+
+    for (let index in userAnswers) {
+        index = parseInt(index);
+        let q = questions[index];
+        let userAnswer = userAnswers[index];
+
+        if (userAnswer === q.a) score++;
+
+        details += `
+            <p>
+                <b>${index + 1}. ${q.q}</b><br>
+                <span class="${userAnswer === q.a ? 'correct-answer' : 'incorrect-answer'}">
+                    Your answer: ${q.o[userAnswer]}
+                </span><br>
+                <span class="correct-answer">Correct answer: ${q.o[q.a]}</span>
+            </p><hr>
+        `;
+    }
+
+    if (answeredQuestions === 0) {
+        details = "<p>You did not answer any question.</p>";
+    }
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").innerHTML = `
+        <h2>Answered: ${answeredQuestions} / ${questions.length}</h2>
+        <h2>Your Score: ${score}</h2><br>
+        ${details}
+    `;
+}
+
+/* ─────────── TIMER (unchanged) ─────────── */
+let timeLeft = 15 * 60;
+function countdown() {
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+
+    document.getElementById("time").innerHTML =
+        `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+    if (timeLeft <= 0) {
+        submitQuiz();
+        document.getElementById("timer").style.background = "red";
+        return;
+    }
+    timeLeft--;
+    setTimeout(countdown, 1000);
+}
+countdown();
+
+/* ─────────── SHOW FIRST QUESTION ─────────── */
+showQuestion();
+
+
+</script>
+
+</body>
+</html>

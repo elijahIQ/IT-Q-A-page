@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Try-Out Questions</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+    }
+    header {
+        background: #003366;
+        padding: 15px;
+        color: white;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    #timer {
+        background: #222;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+    }
+    .container {
+        width: 95%;
+        max-width: 900px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+    }
+    .question-box {
+        padding: 15px;
+        background: #eef3fa;
+        border-left: 5px solid #003366;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    button {
+        padding: 12px 20px;
+        background: #003366;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0055aa;
+    }
+    #submitBtn {
+        width: 100%;
+        margin-top: 25px;
+        background: #008800;
+    }
+    #result {
+        display: none;
+        padding: 20px;
+        background: #d8ffd8;
+        border-left: 5px solid #009933;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 20px;
+    }
+    .correct-answer {
+        color: green;
+        font-weight: bold;
+    }
+    .incorrect-answer {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<header>Programming Try-Out Questions</header>
+<div id="timer">Time Left: <span id="time">60:00</span></div>
+
+<div class="container">
+
+    <div id="questionContainer"></div>
+
+    <div class="nav-buttons">
+        <button onclick="prevQuestion()">Previous</button>
+        <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <button id="submitBtn" onclick="submitQuiz()">Submit Answers</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+//new
+
+let questions = [
+  {
+    q: "Which of the following functions does an interpreter perform with the instructions from a high-level language?",
+    o: [
+      "It translates them into machine code line by line",
+      "It compiles them",
+      "It executes them all at once",
+      "It compiles and translates"
+    ],
+    a: 0
+  },
+  {
+    q: "The use of — variables may make programs hard to understand and debug.",
+    o: [
+      "Local",
+      "Reference",
+      "Value",
+      "Global"
+    ],
+    a: 3
+  },
+  {
+    q: "Which of the following expressions would check if a number is between 90 and 100, inclusive?",
+    o: [
+      "90 AND 100",
+      "90 < i",
+      "90 AND i < 100",
+      "90 <= i AND i <= 100"
+    ],
+    a: 3
+  },
+  {
+    q: "What would be displayed if the following pseudocode is executed and the user enters -3, then 0, then 22? Input age While age <= 0 Display \"Impossible! Enter an age greater than 0:\" Input age Display \"Thank you.\"",
+    o: [
+      "Thank you.",
+      "Impossible! Enter an age greater than 0:",
+      "Impossible! Enter an age greater than 0: Thank you.",
+      "Impossible! Enter an age greater than 0: Impossible! Enter an age greater than 0: Thank you."
+    ],
+    a: 2
+  },
+  {
+    q: "Which function accepts strings as arguments and checks if the second string is contained in the first? Input age While age <= 0 Display \"Impossible! Enter an age greater than 0:\" Input age Display \"Thank you.\"",
+    o: [
+      "Append",
+      "Contains",
+      "Substring",
+      "Concat"
+    ],
+    a: 1
+  },
+  {
+    q: "Which of the following is an actual programming language?",
+    o: [
+      "Python",
+      "Pseudocode",
+      "Compiler",
+      "Module"
+    ],
+    a: 0
+  },
+  {
+    q: "Two-dimensional arrays can be thought of as containing:",
+    o: [
+      "Rows and columns",
+      "Elements and columns",
+      "Pages and columns",
+      "Lines and boxes"
+    ],
+    a: 0
+  },
+  {
+    q: "What would be displayed if the following pseudocode is executed and the user enters 3 twice? Display \"Enter your age:\" Input age Display \"An age greater than 0”. Input age",
+    o: [
+      "You",
+      "Impossible!",
+      "Enter an age greater than 0:",
+      "Thank you."
+    ],
+    a: 2
+  },
+  {
+    q: "What does the following expression evaluate to, given that a = 3 and b = 6? NOT (a > b) AND (b > a)",
+    o: [
+      "True",
+      "False",
+      "Error",
+      "0"
+    ],
+    a: 0
+  },
+  {
+    q: "Which of the following is a unary logical operator?",
+    o: [
+      "AND",
+      "NOT",
+      "OR",
+      "All are unary operators"
+    ],
+    a: 1
+  },
+  
+  /* ----------- CONTINUES ---------- */
+  {
+    q: "Which of the following functions does an interpreter perform with the instructions from a high-level language?",
+    o: [
+      "It translates them into machine code line by line",
+      "It compiles them",
+      "It executes them all at once",
+      "It compiles and translates"
+    ],
+    a: 0
+  },
+  {
+    q: "The use of — variables may make programs hard to understand and debug.",
+    o: [
+      "Local",
+      "Reference",
+      "Value",
+      "Global"
+    ],
+    a: 3
+  },
+  {
+    q: "Which of the following expressions would check if a number is between 90 and 100, inclusive?",
+    o: [
+      "90 AND 100",
+      "90 < i",
+      "90 AND i < 100",
+      "90 <= i AND i <= 100"
+    ],
+    a: 3
+  },
+  {
+    q: "What would be displayed if the following pseudocode is executed and the user enters -3, then 0, then 22? Input age While age <= 0 Display \"Impossible! Enter an age greater than 0:\" Input age Display \"Thank you.\"",
+    o: [
+      "Thank you.",
+      "Impossible! Enter an age greater than 0:",
+      "Impossible! Enter an age greater than 0: Thank you.",
+      "Impossible! Enter an age greater than 0: Impossible! Enter an age greater than 0: Thank you."
+    ],
+    a: 2
+  },
+  {
+    q: "Which function accepts strings as arguments and checks if the second string is contained in the first?",
+    o: [
+      "Append",
+      "Contains",
+      "Substring",
+      "Concat"
+    ],
+    a: 1
+  },
+  {
+    q: "Which of the following is an actual programming language?",
+    o: [
+      "Python",
+      "Pseudocode",
+      "Compiler",
+      "Module"
+    ],
+    a: 0
+  },
+  {
+    q: "Two-dimensional arrays can be thought of as containing:",
+    o: [
+      "Rows and columns",
+      "Elements and columns",
+      "Pages and columns",
+      "Lines and boxes"
+    ],
+    a: 0
+  },
+  {
+    q: "What would be displayed if the following pseudocode is executed and the user enters 3 twice? Display \"Enter your age:\" Input age Display \"An age greater than 0”. Input age",
+    o: [
+      "You",
+      "Impossible!",
+      "Enter an age greater than 0:",
+      "Thank you."
+    ],
+    a: 2
+  },
+  {
+    q: "What does the following expression evaluate to, given that a = 3 and b = 6? NOT (a > b) AND (b > a)",
+    o: [
+      "True",
+      "False",
+      "Error",
+      "0"
+    ],
+    a: 0
+  },
+  {
+    q: "Which of the following is a unary logical operator?",
+    o: [
+      "AND",
+      "NOT",
+      "OR",
+      "All are unary operators"
+    ],
+    a: 1
+  },
+
+  {
+    q: "Which of the following is an example of a high level language?",
+    o: [
+      "Machine language",
+      "Java",
+      "Binary",
+      "Assembler"
+    ],
+    a: 1
+  },
+  {
+    q: "A loop that never ends is called:",
+    o: [
+      "A finite loop",
+      "A definite loop",
+      "An infinite loop",
+      "A counter loop"
+    ],
+    a: 2
+  },
+  {
+    q: "Which statement is used to make decisions in programming?",
+    o: [
+      "OUTPUT",
+      "IF",
+      "FOR",
+      "CASE"
+    ],
+    a: 1
+  },
+  {
+    q: "Which data type would best store whole numbers?",
+    o: [
+      "String",
+      "Float",
+      "Integer",
+      "Boolean"
+    ],
+    a: 2
+  },
+  {
+    q: "Which symbol is commonly used for assignment?",
+    o: [
+      "=",
+      "==",
+      "!=",
+      "<>"
+    ],
+    a: 0
+  },
+  {
+    q: "Which of these is NOT a logical operator?",
+    o: [
+      "AND",
+      "OR",
+      "NOT",
+      "ADD"
+    ],
+    a: 3
+  },
+  {
+    q: "Which is an example of an iterative structure?",
+    o: [
+      "IF",
+      "CASE",
+      "WHILE",
+      "INPUT"
+    ],
+    a: 2
+  },
+  {
+    q: "What does the term debugging mean?",
+    o: [
+      "Writing code",
+      "Finding and fixing errors",
+      "Compiling programs",
+      "Running programs"
+    ],
+    a: 1
+  },
+  {
+    q: "Which is an example of a conditional operator?",
+    o: [
+      "<",
+      "+",
+      "%",
+      "*"
+    ],
+    a: 0
+  },
+  {
+    q: "Which keyword is used to stop a loop?",
+    o: [
+      "EXIT",
+      "END",
+      "BREAK",
+      "STOP"
+    ],
+    a: 2
+  },
+  {
+    "q": "41. Which statement is used to choose between two options?",
+    "o": [
+      "FOR",
+      "IF…THEN…ELSE",
+      "REPEAT",
+      "CASE"
+    ],
+    "a": 1
+  },
+  {
+    "q": "42. A sequence structure means the instructions are executed",
+    "o": [
+      "Randomly",
+      "In loops",
+      "One after another",
+      "Only if conditions are true"
+    ],
+    "a": 2
+  },
+  {
+    "q": "43. Which of the following is used to read input from the user?",
+    "o": [
+      "PRINT",
+      "READ",
+      "DISPLAY",
+      "SHOW"
+    ],
+    "a": 1
+  },
+  {
+    "q": "44. Which of the following is NOT a valid operator?",
+    "o": [
+      "+",
+      "-",
+      "++",
+      "*"
+    ],
+    "a": 2
+  },
+  {
+    "q": "45. The term syntax refers to",
+    "o": [
+      "The meaning of code",
+      "Rules for writing code",
+      "The speed of execution",
+      "Names of variables"
+    ],
+    "a": 1
+  },
+  {
+    "q": "46. A syntax error occurs when",
+    "o": [
+      "The program runs too slowly",
+      "The rules of the language are broken",
+      "The wrong output is produced",
+      "The computer crashes"
+    ],
+    "a": 1
+  },
+  {
+    "q": "47. A runtime error happens when",
+    "o": [
+      "The code violates syntax rules",
+      "The program is compiled",
+      "The program is executing",
+      "The program is documented"
+    ],
+    "a": 2
+  },
+  {
+    "q": "48. Which of the following is an example of a relational operator?",
+    "o": [
+      "*",
+      "+",
+      ">",
+      "%"
+    ],
+    "a": 2
+  },
+  {
+    "q": "49. Which of these is NOT a loop control structure?",
+    "o": [
+      "FOR",
+      "WHILE",
+      "IF",
+      "DO WHILE"
+    ],
+    "a": 2
+  },
+  {
+    "q": "50. A flowchart is mainly used for",
+    "o": [
+      "Coding",
+      "Testing",
+      "Planning logic",
+      "Debugging"
+    ],
+    "a": 2
+  },
+
+  {
+    "q": "51. What shape is used for a process in flowcharts?",
+    "o": [
+      "Rectangle",
+      "Diamond",
+      "Circle",
+      "Triangle"
+    ],
+    "a": 0
+  },
+  {
+    "q": "52. What is the primary purpose of variables?",
+    "o": [
+      "To hold data",
+      "To hold comments",
+      "To draw diagrams",
+      "To store flowcharts"
+    ],
+    "a": 0
+  },
+  {
+    "q": "53. Which of the following stores true/false?",
+    "o": [
+      "INTEGER",
+      "BOOLEAN",
+      "STRING",
+      "REAL"
+    ],
+    "a": 1
+  },
+  {
+    "q": "54. A WHILE loop tests its condition",
+    "o": [
+      "Before executing the loop body",
+      "After executing the loop body",
+      "During compilation",
+      "After program ends"
+    ],
+    "a": 0
+  },
+  {
+    "q": "55. A DO WHILE loop tests its condition",
+    "o": [
+      "Before the loop",
+      "After the loop",
+      "During variable declaration",
+      "Before compilation"
+    ],
+    "a": 1
+  },
+  {
+    "q": "56. Which of these is a valid array declaration?",
+    "o": [
+      "array[10]",
+      "arr = 10",
+      "array(10)",
+      "arr = {10}"
+    ],
+    "a": 0
+  },
+  {
+    "q": "57. What does an algorithm provide?",
+    "o": [
+      "A step-by-step solution",
+      "A programming language",
+      "Computer hardware",
+      "Graphics"
+    ],
+    "a": 0
+  },
+  {
+    "q": "58. A program that translates code line-by-line is",
+    "o": [
+      "Compiler",
+      "Assembler",
+      "Interpreter",
+      "Translator"
+    ],
+    "a": 2
+  },
+  {
+    "q": "59. What is used to represent decision-making in pseudocode?",
+    "o": [
+      "IF",
+      "FOR",
+      "READ",
+      "DISPLAY"
+    ],
+    "a": 0
+  },
+  {
+    "q": "60. Which of the following is a logical operator?",
+    "o": [
+      "*",
+      "AND",
+      "+",
+      "%"
+    ],
+    "a": 1
+  },
+
+  {
+    "q": "61. Which of the following is NOT true about arrays?",
+    "o": [
+      "They store multiple values",
+      "They store values of different types",
+      "They use index numbers",
+      "They are sequential"
+    ],
+    "a": 1
+  },
+  {
+    "q": "62. The index of the first element in most arrays is",
+    "o": [
+      "0",
+      "1",
+      "10",
+      "100"
+    ],
+    "a": 0
+  },
+  {
+    "q": "63. Which operator returns true if only one condition is true?",
+    "o": [
+      "AND",
+      "OR",
+      "XOR",
+      "NOT"
+    ],
+    "a": 2
+  },
+  {
+    "q": "64. Which of the following best describes selection?",
+    "o": [
+      "Choosing between alternatives",
+      "Repeating instructions",
+      "Assigning variables",
+      "Drawing flowcharts"
+    ],
+    "a": 0
+  },
+  {
+    "q": "65. What does INPUT do?",
+    "o": [
+      "Displays output",
+      "Reads data",
+      "Starts program",
+      "Ends program"
+    ],
+    "a": 1
+  },
+  {
+    "q": "66. What does OUTPUT do?",
+    "o": [
+      "Reads input",
+      "Shows results",
+      "Stores values",
+      "Ends program"
+    ],
+    "a": 1
+  },
+  {
+    "q": "67. Which of the following is NOT a characteristic of a good program?",
+    "o": [
+      "Efficiency",
+      "Complexity",
+      "Readability",
+      "Maintainability"
+    ],
+    "a": 1
+  },
+  {
+    "q": "68. Which symbol is used for start/end in flowcharts?",
+    "o": [
+      "Oval",
+      "Rectangle",
+      "Diamond",
+      "Hexagon"
+    ],
+    "a": 0
+  },
+  {
+    "q": "69. In pseudocode, ELSE is used",
+    "o": [
+      "To repeat actions",
+      "When IF condition is true",
+      "When IF condition is false",
+      "To end loop"
+    ],
+    "a": 2
+  },
+  {
+    "q": "70. A counter-controlled loop must have",
+    "o": [
+      "A condition",
+      "A counter",
+      "A decision",
+      "A Boolean"
+    ],
+    "a": 1
+  },
+
+  {
+    "q": "71. Incrementing a counter means",
+    "o": [
+      "Adding 1",
+      "Subtracting 1",
+      "Dividing by 1",
+      "Multiplying by 1"
+    ],
+    "a": 0
+  },
+  {
+    "q": "72. Decrementing a counter means",
+    "o": [
+      "Adding 1",
+      "Subtracting 1",
+      "Multiplying by 2",
+      "Ending loop"
+    ],
+    "a": 1
+  },
+  {
+    "q": "73. A loop that never stops is called",
+    "o": [
+      "Finite",
+      "Infinite",
+      "Definite",
+      "Conditional"
+    ],
+    "a": 1
+  },
+  {
+    "q": "74. Which of the following is an arithmetic operator?",
+    "o": [
+      ">",
+      "<=",
+      "+",
+      "="
+    ],
+    "a": 2
+  },
+  {
+    "q": "75. Which of these is used to join strings?",
+    "o": [
+      "+",
+      "*",
+      "%",
+      "/"
+    ],
+    "a": 0
+  },
+  {
+    "q": "76. Which of these is NOT an arithmetic operator?",
+    "o": [
+      "+",
+      "-",
+      "*",
+      "AND"
+    ],
+    "a": 3
+  },
+  {
+    "q": "77. A variable that can be accessed anywhere in the program is",
+    "o": [
+      "Local variable",
+      "Constant",
+      "Global variable",
+      "Integer"
+    ],
+    "a": 2
+  },
+  {
+    "q": "78. Which of the following stores decimal numbers?",
+    "o": [
+      "Integer",
+      "Float",
+      "Boolean",
+      "Character"
+    ],
+    "a": 1
+  },
+  {
+    "q": "79. Another word for repetition is",
+    "o": [
+      "Selection",
+      "Iteration",
+      "Decision",
+      "Execution"
+    ],
+    "a": 1
+  },
+  {
+    "q": "80. IF…THEN…ELSE is an example of",
+    "o": [
+      "Repetition",
+      "Selection",
+      "Sequence",
+      "Iteration"
+    ],
+    "a": 1
+  },
+  {
+    "q": "1. Pseudocode is an example of",
+    "o": [
+      "A programming language",
+      "A design tool",
+      "A compiler",
+      "An assembler"
+    ],
+    "a": 1
+  },
+  {
+    "q": "2. Which of the following is not a characteristic of a good algorithm?",
+    "o": [
+      "Clarity",
+      "Ambiguity",
+      "Finiteness",
+      "Effectiveness"
+    ],
+    "a": 1
+  },
+  {
+    "q": "3. Which symbol is used to show the start or end of a flowchart?",
+    "o": [
+      "Rectangle",
+      "Diamond",
+      "Oval",
+      "Parallelogram"
+    ],
+    "a": 2
+  },
+  {
+    "q": "4. In a flowchart, the input/output operation is represented by which shape?",
+    "o": [
+      "Oval",
+      "Rectangle",
+      "Diamond",
+      "Parallelogram"
+    ],
+    "a": 3
+  },
+  {
+    "q": "5. Which programming construct allows repeated execution of a block of code?",
+    "o": [
+      "Sequence",
+      "Selection",
+      "Iteration",
+      "Recursion"
+    ],
+    "a": 2
+  },
+  {
+    "q": "6. Which of the following is an example of a conditional statement?",
+    "o": [
+      "FOR",
+      "WHILE",
+      "IF",
+      "REPEAT"
+    ],
+    "a": 2
+  },
+  {
+    "q": "7. What does the term debugging refer to?",
+    "o": [
+      "Writing programs",
+      "Removing errors from programs",
+      "Compiling code",
+      "Documenting code"
+    ],
+    "a": 1
+  },
+  {
+    "q": "8. The following are high-level languages except",
+    "o": [
+      "Python",
+      "Java",
+      "C++",
+      "Assembly"
+    ],
+    "a": 3
+  },
+  {
+    "q": "9. Which of the following translates a high-level program into machine code all at once?",
+    "o": [
+      "Interpreter",
+      "Compiler",
+      "Assembler",
+      "Loader"
+    ],
+    "a": 1
+  },
+  {
+    "q": "10. Which operator is used for equality comparison?",
+    "o": [
+      "=",
+      "==",
+      "!=",
+      "<>"
+    ],
+    "a": 1
+  },
+
+  {
+    "q": "11. Which of the following is a loop structure?",
+    "o": [
+      "IF",
+      "CASE",
+      "FOR",
+      "INPUT"
+    ],
+    "a": 2
+  },
+  {
+    "q": "12. A variable is best described as",
+    "o": [
+      "A reserved memory location",
+      "A fixed value",
+      "An operator",
+      "A conditional statement"
+    ],
+    "a": 0
+  },
+  {
+    "q": "13. Which data type stores text?",
+    "o": [
+      "Integer",
+      "Boolean",
+      "String",
+      "Float"
+    ],
+    "a": 2
+  },
+  {
+    "q": "14. Which of the following is used to stop a loop?",
+    "o": [
+      "STOP",
+      "BREAK",
+      "END",
+      "EXIT"
+    ],
+    "a": 1
+  },
+  {
+    "q": "15. Logical AND returns true only if",
+    "o": [
+      "Both conditions are true",
+      "One condition is true",
+      "Both conditions are false",
+      "One condition is false"
+    ],
+    "a": 0
+  },
+  {
+    "q": "16. The symbol used for NOT is",
+    "o": [
+      "!",
+      "&",
+      "|",
+      "%"
+    ],
+    "a": 0
+  },
+  {
+    "q": "17. Which of the following is not a loop?",
+    "o": [
+      "FOR",
+      "WHILE",
+      "REPEAT",
+      "CASE"
+    ],
+    "a": 3
+  },
+  {
+    "q": "18. What is the output of NOT(true)?",
+    "o": [
+      "true",
+      "false",
+      "0",
+      "1"
+    ],
+    "a": 1
+  },
+  {
+    "q": "19. An array is used to store",
+    "o": [
+      "A single value",
+      "Multiple values of the same type",
+      "Logical expressions",
+      "Strings only"
+    ],
+    "a": 1
+  },
+  {
+    "q": "20. In a two-dimensional array, data is arranged in",
+    "o": [
+      "Rows and columns",
+      "Levels",
+      "Stacks",
+      "Pairs"
+    ],
+    "a": 0
+  },
+
+  {
+    "q": "21. Which statement is used for multiple selection?",
+    "o": [
+      "IF",
+      "CASE",
+      "FOR",
+      "WHILE"
+    ],
+    "a": 1
+  },
+  {
+    "q": "22. Which of the following is a valid boolean value?",
+    "o": [
+      "Yes",
+      "True",
+      "Ok",
+      "Right"
+    ],
+    "a": 1
+  },
+  {
+    "q": "23. A compiler generates",
+    "o": [
+      "Source code",
+      "Machine code",
+      "Pseudocode",
+      "Flowchart"
+    ],
+    "a": 1
+  },
+  {
+    "q": "24. What is another name for a decision symbol in a flowchart?",
+    "o": [
+      "Rectangle",
+      "Diamond",
+      "Circle",
+      "Oval"
+    ],
+    "a": 1
+  },
+  {
+    "q": "25. Which operator is used for inequality?",
+    "o": [
+      "==",
+      "!=",
+      "=",
+      "+"
+    ],
+    "a": 1
+  },
+  {
+    "q": "26. A loop that runs a fixed number of times is called",
+    "o": [
+      "Definite loop",
+      "Indefinite loop",
+      "Infinite loop",
+      "Recursive loop"
+    ],
+    "a": 0
+  },
+  {
+    "q": "27. A WHILE loop repeats as long as",
+    "o": [
+      "The condition is false",
+      "The condition is true",
+      "Input is given",
+      "Output is displayed"
+    ],
+    "a": 1
+  },
+  {
+    "q": "28. The process of breaking a problem into smaller parts is called",
+    "o": [
+      "Compilation",
+      "Decomposition",
+      "Debugging",
+      "Execution"
+    ],
+    "a": 1
+  },
+  {
+    "q": "29. What is the symbol for OR?",
+    "o": [
+      "&&",
+      "||",
+      "!",
+      "%"
+    ],
+    "a": 1
+  },
+  {
+    "q": "30. Which of the following best describes pseudocode?",
+    "o": [
+      "Formal programming syntax",
+      "Informal English-like description of a program",
+      "Machine-level instructions",
+      "Executable code"
+    ],
+    "a": 1
+  },
+
+  {
+    "q": "31. Which loop always executes at least once?",
+    "o": [
+      "FOR",
+      "WHILE",
+      "DO WHILE",
+      "REPEAT UNTIL"
+    ],
+    "a": 2
+  },
+  {
+    "q": "32. What is the purpose of comments in a program?",
+    "o": [
+      "To increase speed",
+      "To explain code to humans",
+      "To store variables",
+      "To create loops"
+    ],
+    "a": 1
+  },
+  {
+    "q": "33. An algorithm must always",
+    "o": [
+      "Be ambiguous",
+      "Run forever",
+      "Have a clear ending",
+      "Be written in English"
+    ],
+    "a": 2
+  },
+  {
+    "q": "34. Which data type holds true/false values?",
+    "o": [
+      "String",
+      "Boolean",
+      "Float",
+      "Character"
+    ],
+    "a": 1
+  },
+  {
+    "q": "35. Which of the following is NOT a characteristic of good pseudocode?",
+    "o": [
+      "Clarity",
+      "Precision",
+      "Ambiguity",
+      "Simplicity"
+    ],
+    "a": 2
+  },
+  {
+    "q": "36. Which of the following is a valid flowchart connector symbol?",
+    "o": [
+      "Circle",
+      "Triangle",
+      "Hexagon",
+      "Star"
+    ],
+    "a": 0
+  },
+  {
+    "q": "37. The diamond symbol in a flowchart is used for",
+    "o": [
+      "Output",
+      "Decision",
+      "Processing",
+      "Start/Stop"
+    ],
+    "a": 1
+  },
+  {
+    "q": "38. An array index usually starts at",
+    "o": [
+      "0",
+      "1",
+      "2",
+      "10"
+    ],
+    "a": 0
+  },
+  {
+    "q": "39. Which of these is a comparison operator?",
+    "o": [
+      "+",
+      "/",
+      ">",
+      "%"
+    ],
+    "a": 2
+  },
+  {
+    "q": "40. Which operator is used for multiplication?",
+    "o": [
+      "*",
+      "%",
+      "&",
+      "#"
+    ],
+    "a": 0
+  },
+  {
+    "q": "Flowchart uses __ symbols.",
+    "o": ["rectangular", "oval", "geometric", "pyramid"],
+    "a": 2
+  },
+  {
+    "q": "In a flowchart any good algorithm must?",
+    "o": ["flow chart", "input", "output", "decision"],
+    "a": 0
+  },
+  {
+    "q": "A flowchart is __ representation of an algorithm.",
+    "o": ["graphical", "computer", "colorful", "diagram"],
+    "a": 0
+  },
+  {
+    "q": "In a flowchart, the __ symbol shows the beginning and end of a program.",
+    "o": ["rectangle", "diamond", "oval", "parallelogram"],
+    "a": 2
+  },
+  {
+    "q": "The __ symbol in a flow chart shows data input and output.",
+    "o": ["oval", "diamond", "parallelogram", "rectangle"],
+    "a": 2
+  },
+  {
+    "q": "Flow charts have a definite __ character.",
+    "o": ["sequence", "shape", "symbol", "line"],
+    "a": 0
+  },
+  {
+    "q": "Which of the following shapes in a flowchart allows for input and output?",
+    "o": ["circle", "diamond", "rectangle", "parallelogram"],
+    "a": 3
+  },
+  {
+    "q": "Lines that show the direction of the flow of the program in a flowchart are called __.",
+    "o": ["shapes", "symbols", "parallelograms", "flow lines"],
+    "a": 3
+  },
+  {
+    "q": "What does the term decision imply in programming?",
+    "o": ["output", "choice", "input", "value"],
+    "a": 1
+  },
+  {
+    "q": "What is the first required step in constructing a flowchart?",
+    "o": ["Algorithm", "Dialogue", "Coding", "Situation"],
+    "a": 0
+  },
+  {
+    "q": "Which of the following statements about flow chart symbol is NOT correct?",
+    "o": ["This symbol shows the beginning and end", "This symbol shows data input and output", "This symbol shows a calculation of decision", "Data are processed by the computer"],
+    "a": 3
+  },
+  {
+    "q": "The symbols used for drawing flow charts is __.",
+    "o": ["graphic", "design", "geometric", "logo"],
+    "a": 2
+  },
+  {
+    "q": "A flowchart uses different types of __.",
+    "o": ["symbols", "characters", "Alphabets", "codes"],
+    "a": 0
+  },
+  {
+    "q": "Flowchart is a graphical __",
+    "o": ["design of sequence", "representation of an algorithm", "presentation technique", "diagramming tool"],
+    "a": 1
+  },
+  {
+    "q": "Flow charts have __ character.",
+    "o": ["geometric", "questionable", "definite", "incomplete"],
+    "a": 2
+  },
+  {
+    "q": "Which of the following statements is not correct?",
+    "o": ["Oval shape is used at the beginning and end of flowchart", "diamond shape is used for input and output in a flowchart", "rectangular shape is used for data processing.", "parallelogram is used for input and output"],
+    "a": 1
+  },
+  {
+    "q": "In drawing flowchart, flow lines are used to?",
+    "o": ["Show inputs", "show shapes", "display output", "show direction"],
+    "a": 3
+  },
+  {
+    "q": "The symbol for input and output is __.",
+    "o": ["parallelogram", "diamond", "rectangle", "oval"],
+    "a": 0
+  },
+  {
+    "q": "In ¬(¬A V ¬B), if A is false and B is false then the output is __.",
+    "o": ["false", "true", "2 false", "none"],
+    "a": 0
+  },
+  {
+    "q": "¬(¬A V ¬B) is a __ operation.",
+    "o": ["logical", "notation", "table", "gate"],
+    "a": 0
+  },
+  {
+    "q": "¬(¬A ^ ¬B) is an operation in __ programming",
+    "o": ["Sequential", "logic", "pseudocode", "diagramming"],
+    "a": 1
+  },
+  {
+    "q": "De Morgan conventions apply to __.",
+    "o": ["formulas", "notations", "gates", "expressions"],
+    "a": 3
+  },
+  {
+    "q": "Using De Morgan conventions, ¬(¬A V ¬B) becomes __.",
+    "o": ["A V B", "A ^ B", "A - B", "A + B"],
+    "a": 1
+  },
+  {
+    "q": "What does the symbol ^ represent in logic?",
+    "o": ["AND", "OR", "NOT", "IF"],
+    "a": 0
+  },
+  {
+    "q": "The symbol V represents?",
+    "o": ["AND", "OR", "NOT", "NOR"],
+    "a": 1
+  },
+  {
+    "q": "The symbol ¬ means?",
+    "o": ["OR", "NOT", "AND", "XOR"],
+    "a": 1
+  },
+  {
+    "q": "AND is applied when output is __.",
+    "o": ["false if any input is false", "true when both inputs are true", "never true", "always true"],
+    "a": 1
+  },
+  {
+    "q": "Which logic gate outputs false when both inputs are false?",
+    "o": ["NOT", "NOR", "AND", "OR"],
+    "a": 3
+  },
+  {
+    "q": "If A=true and B=false, what is A V B?",
+    "o": ["true", "false", "invalid", "none"],
+    "a": 0
+  },
+  {
+    "q": "If A=false and B=false, what is A ^ B?",
+    "o": ["true", "false", "undefined", "all"],
+    "a": 1
+  },
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /* Due to ChatGPT message limits, I will continue below. */
+];
+
+
+//end
+
+
+
+/* ─────────────────────────
+    RANDOMIZE QUESTIONS
+─────────────────────────── */
+questions = questions.sort(() => Math.random() - 0.5);
+
+let currentIndex = 0;
+
+
+/* ──────────── STORE USER ANSWERS ──────────── */
+let userAnswers = {};  
+// example: userAnswers[3] = 2  → Question 3, option index 2 selected
+
+/* ─────────── DISPLAY QUESTION (with stored answers) ─────────── */
+function showQuestion() {
+    let q = questions[currentIndex];
+    let container = document.getElementById("questionContainer");
+
+    container.innerHTML = `
+        <div class="question-box">
+            <p><b>${currentIndex + 1}. ${q.q}</b></p>
+            ${q.o.map((opt, i) => `
+                <label>
+                    <input type="radio" name="q${currentIndex}"
+                        value="${i}"
+                        ${userAnswers[currentIndex] === i ? "checked" : ""}>
+                    ${opt}
+                </label><br>
+            `).join("")}
+        </div>
+    `;
+
+    // Save answer automatically when clicking
+    document.querySelectorAll(`input[name="q${currentIndex}"]`).forEach(radio => {
+        radio.addEventListener("change", function() {
+            userAnswers[currentIndex] = parseInt(this.value);
+        });
+    });
+}
+
+/* ─────────── NEXT / PREVIOUS — Keeps Answers Saved ─────────── */
+function nextQuestion() {
+    if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        showQuestion();
+    }
+}
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+    }
+}
+
+/* ─────────── SUBMIT: Score Only Based on Answered Questions ─────────── */
+function submitQuiz() {
+    let score = 0;
+    let answeredQuestions = Object.keys(userAnswers).length;
+    let details = "";
+
+    for (let index in userAnswers) {
+        index = parseInt(index);
+        let q = questions[index];
+        let userAnswer = userAnswers[index];
+
+        if (userAnswer === q.a) score++;
+
+        details += `
+            <p>
+                <b>${index + 1}. ${q.q}</b><br>
+                <span class="${userAnswer === q.a ? 'correct-answer' : 'incorrect-answer'}">
+                    Your answer: ${q.o[userAnswer]}
+                </span><br>
+                <span class="correct-answer">Correct answer: ${q.o[q.a]}</span>
+            </p><hr>
+        `;
+    }
+
+    if (answeredQuestions === 0) {
+        details = "<p>You did not answer any question.</p>";
+    }
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").innerHTML = `
+        <h2>Answered: ${answeredQuestions} / ${questions.length}</h2>
+        <h2>Your Score: ${score}</h2><br>
+        ${details}
+    `;
+}
+
+/* ─────────── TIMER (unchanged) ─────────── */
+let timeLeft = 90 * 60;
+function countdown() {
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+
+    document.getElementById("time").innerHTML =
+        `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+    if (timeLeft <= 0) {
+        submitQuiz();
+        document.getElementById("timer").style.background = "red";
+        return;
+    }
+    timeLeft--;
+    setTimeout(countdown, 1000);
+}
+countdown();
+
+/* ─────────── SHOW FIRST QUESTION ─────────── */
+showQuestion();
+
+
+</script>
+
+</body>
+</html>

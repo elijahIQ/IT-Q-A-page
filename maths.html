@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Database Try-Out Questions</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+    }
+    header {
+        background: #003366;
+        padding: 15px;
+        color: white;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    #timer {
+        background: #222;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        font-size: 20px;
+    }
+    .container {
+        width: 95%;
+        max-width: 900px;
+        margin: 20px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+    }
+    .question-box {
+        padding: 15px;
+        background: #eef3fa;
+        border-left: 5px solid #003366;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+    button {
+        padding: 12px 20px;
+        background: #003366;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0055aa;
+    }
+    #submitBtn {
+        width: 100%;
+        margin-top: 25px;
+        background: #008800;
+    }
+    #result {
+        display: none;
+        padding: 20px;
+        background: #d8ffd8;
+        border-left: 5px solid #009933;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 20px;
+    }
+    .correct-answer {
+        color: green;
+        font-weight: bold;
+    }
+    .incorrect-answer {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<header>Statistical modeling Try-Out Questions</header>
+<div id="timer">Time Left: <span id="time">60:00</span></div>
+
+<div class="container">
+
+    <div id="questionContainer"></div>
+
+    <div class="nav-buttons">
+        <button onclick="prevQuestion()">Previous</button>
+        <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <button id="submitBtn" onclick="submitQuiz()">Submit Answers</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+//new
+let questions = [
+  {
+    q: "What is the complement of the event A = {a, d, e} in the sample space S = {a, b, c, d, e}?",
+    o: ["{b, c}", "{a, b, c}", "{d, e}", "{a, b, c, d}"],
+    a: 0
+  },
+  {
+    q: "What is the probability of the complement of an event A if P(A) = 0.7?",
+    o: ["0.3", "0.7", "1", "0"],
+    a: 0
+  },
+  {
+    q: "What is the intersection of the events E = {2, 4, 6} and T = {3, 4, 5, 6}?",
+    o: ["{4, 6}", "{2, 3, 4, 5, 6}", "{2, 4, 6}", "{3, 4, 5, 6}"],
+    a: 0
+  },
+  {
+    q: "What is the probability of the intersection of the events E and T if P(E) = 1/2 and P(T) = 2/3?",
+    o: ["1/6", "1/3", "1/2", "2/3"],
+    a: 1
+  },
+  {
+    q: "What is the union of the events O = {1, 3, 5} and T = {3, 4, 5, 6}?",
+    o: ["{1, 3, 4, 5, 6}", "{1, 3, 5}", "{3, 4, 5, 6}", "{1, 2, 3, 4, 5, 6}"],
+    a: 0
+  },
+  {
+    q: "What is the probability of the union of the events E and T if P(E) = 1/2, P(T) = 2/3, and P(E ∩ T) = 1/3?",
+    o: ["1/2", "2/3", "5/6", "1"],
+    a: 2
+  },
+  {
+    q: "What is the probability of getting at least one head in five tosses of a fair coin?",
+    o: ["1/32", "1/16", "31/32", "1/2"],
+    a: 2
+  },
+  {
+    q: "Are events A and B independent if P(A) = 1/2, P(B) = 1/3, and P(A ∩ B) = 1/6?",
+    o: ["Yes", "No", "Maybe", "Cannot be determined"],
+    a: 0
+  },
+  {
+    q: "What is the probability of drawing a black marble on the first draw if there are 7 black marbles and 3 white marbles in the jar?",
+    o: ["1/2", "2/3", "7/10", "1/3"],
+    a: 2
+  },
+  {
+    q: "What is the probability of drawing a white marble on the first draw if there are 7 black marbles and 3 white marbles in the jar?",
+    o: ["1/2", "2/3", "3/10", "1/3"],
+    a: 2
+  },
+  {
+    q: "Are events A and B mutually exclusive if P(A ∩ B) = 0?",
+    o: ["Yes", "No", "Maybe", "Cannot be determined"],
+    a: 0
+  },
+  {
+    q: "What is the probability of drawing two black marbles in a row, without replacement, if there are 7 black marbles and 3 white marbles in the jar?",
+    o: ["1/2", "2/3", "7/15", "1/3"],
+    a: 2
+  },
+  {
+    q: "What is the probability of drawing exactly one black marble in two draws, without replacement, if there are 7 black marbles and 3 white marbles in the jar?",
+    o: ["1/2", "2/3", "7/15", "14/15"],
+    a: 3
+  },
+  {
+    q: "What is the probability of drawing at least one black marble in two draws, without replacement, if there are 7 black marbles and 3 white marbles in the jar?",
+    o: ["1/2", "2/3", "7/15", "14/15"],
+    a: 3
+  },
+  {
+    q: "Are events A and B mutually exclusive if P(A ∩ B) = 1/6?",
+    o: ["Yes", "No", "Maybe", "Cannot be determined"],
+    a: 1
+  },
+  {
+    q: "What is the probability of event A given event B, if P(A ∩ B) = 1/6 and P(B) = 1/2?",
+    o: ["1/3", "1/2", "2/3", "1"],
+    a: 0
+  },
+  {
+    q: "What is the probability of event B given event A, if P(A ∩ B) = 1/6 and P(A) = 1/3?",
+    o: ["1/2", "1/3", "2/3", "1"],
+    a: 0
+  },
+  {
+    q: "Are events A and B independent if P(A) = 1/2, P(B) = 1/3, and P(A ∩ B) = 1/5?",
+    o: ["Yes", "No", "Maybe", "Cannot be determined"],
+    a: 1
+  },
+  {
+    q: "What is the probability of event A given event B, if P(A ∩ B) = 1/5 and P(B) = 1/3?",
+    o: ["1/2", "1/3", "2/3", "3/5"],
+    a: 3
+  },
+  {
+    q: "What is the probability of event B given event A, if P(A ∩ B) = 1/5 and P(A) = 1/2?",
+    o: ["1/2", "1/3", "2/3", "2/5"],
+    a: 3
+  },
+  {
+    q: "What is the probability of drawing a black marble on the second draw, given that the first marble drawn was white, if there are 7 black marbles and 3 white marbles in the jar?",
+    o: ["1/2", "2/3", "7/9", "1/3"],
+    a: 2
+  },
+  {
+    q: "What is the probability of drawing a white marble on the second draw, given that the first marble drawn was white, if there are 7 black marbles and 3 white marbles in the jar?",
+    o: ["1/2", "2/3", "2/9", "1/3"],
+    a: 2
+  },
+  {
+    q: "What is the sample space for the experiment of tossing a single coin?",
+    o: ["{h}", "{t}", "{h, t}", "{hh, tt}"],
+    a: 2
+  },
+  {
+    q: "What is the probability of getting a head when a fair coin is tossed?",
+    o: ["0", "1/2", "1", "1/4"],
+    a: 1
+  },
+  {
+    q: "What is the sample space for the experiment of rolling a single die?",
+    o: ["{1, 2, 3}", "{1, 2, 3, 4, 5, 6}", "{2, 4, 6}", "{1, 3, 5}"],
+    a: 1
+  },
+  {
+    q: "What is the probability of rolling an even number on a fair die?",
+    o: ["1/6", "1/3", "1/2", "2/3"],
+    a: 2
+  },
+  {
+    q: "What is the probability of rolling a number greater than 2 on a fair die?",
+    o: ["1/6", "1/3", "1/2", "2/3"],
+    a: 3
+  },
+  {
+    q: "What is the sample space for the experiment of tossing two indistinguishable coins?",
+    o: ["{hh, tt}", "{hh, ht, tt}", "{hh, ht, th, tt}", "{2h, 2t, d}"],
+    a: 3
+  },
+  {
+    q: "What is the probability of getting two heads when two fair coins are tossed?",
+    o: ["1/4", "1/2", "3/4", "1"],
+    a: 0
+  },
+  {
+    q: "What is the probability of getting at least one head when two fair coins are tossed?",
+    o: ["1/4", "1/2", "3/4", "1"],
+    a: 2
+  },
+  {
+    q: "What is the sample space for the experiment of tossing three coins?",
+    o: ["{hhh, hht, hth, htt, thh, tht, tth, ttt}", "{hhh, hht, hth, htt, thh, tht, tth}", "{hhh, hht, hth, htt, thh, tht, ttt}", "{hhh, hht, hth, htt, thh, tth, ttt}"],
+    a: 0
+  },
+  {
+    q: "What is the probability of getting exactly two heads when three fair coins are tossed?",
+    o: ["1/8", "3/8", "1/2", "3/4"],
+    a: 1
+  },
+  {
+    q: "What is the mode of the data set: -1, 0, 2, 0?",
+    o: ["-1", "0", "2", "1"],
+    a: 1
+  },
+  {
+    q: "What is the range of the data set: 40, 38, 42, 40, 39, 39, 43, 40, 39, 40?",
+    o: ["3", "4", "5", "6"],
+    a: 2
+  },
+  {
+    q: "What is the formula for calculating the sample variance?",
+    o: ["s^2 = Σ(x_i - x̄)^2 / n", "s^2 = Σ(x_i - x̄)^2 / (n-1)", "s^2 = Σx_i^2 - (Σx_i)^2 / n", "s^2 = Σx_i^2 - (Σx_i)^2 / (n-1)"],
+    a: 1
+  },
+  {
+    q: "What is the z-score of an observation x?",
+    o: ["z = (x - x̄) / s", "z = (x - μ) / σ", "z = (x - x̄) / σ", "z = (x - μ) / s"],
+    a: 0
+  },
+  {
+    q: "What is the percentile rank of a value x?",
+    o: ["The percentage of data values less than x", "The percentage of data values greater than x", "The percentage of data values equal to x", "The percentage of data values less than or equal to x"],
+    a: 3
+  },
+  {
+    q: "What is the interquartile range (IQR)?",
+    o: ["Q3 - Q1", "Q2 - Q1", "Q3 - Q2", "Q1 - Q2"],
+    a: 0
+  },
+  {
+    q: "What is the five-number summary of a data set?",
+    o: ["{x_min, Q1, Q2, Q3, x_max}", "{x_min, Q1, Q2, Q3, x_max}", "{x_min, Q1, Q2, Q3, x_max}", "{x_min, Q1, Q2, Q3, x_max}"],
+    a: 0
+  },
+  {
+    q: "What is the mean of the data set: 1, 2, 3, 4, 5?",
+    o: ["2", "3", "4", "5"],
+    a: 1
+  },
+  {
+    q: "What is the median of the data set: 1, 2, 3, 4, 5?",
+    o: ["2", "3", "4", "5"],
+    a: 1
+  },
+  {
+    q: "What is the mode of the data set: 1, 2, 2, 3, 3, 3?",
+    o: ["1", "2", "3", "4"],
+    a: 2
+  },
+  {
+    q: "What is the median of a data set?",
+    o: ["The middle value", "The most frequent value", "The average value", "The sum of the values"],
+    a: 0
+  },
+  {
+    q: "What is the mode of a data set?",
+    o: ["The middle value", "The most frequent value", "The average value", "The sum of the values"],
+    a: 1
+  },
+  {
+    q: "What is an outlier in a data set?",
+    o: ["A value that is far removed from the other values", "A value that is close to the mean", "A value that is equal to the median", "A value that is equal to the mode"],
+    a: 0
+  },
+  {
+    q: "How is the median calculated when the number of values is even?",
+    o: ["The average of the two middle values", "The middle value", "The most frequent value", "The sum of the values"],
+    a: 0
+  },
+  {
+    q: "What is the purpose of a data frequency table?",
+    o: ["To display data distribution", "To summarize data", "To identify trends", "To test hypotheses"],
+    a: 0
+  },
+  {
+    q: "What is the difference between a frequency histogram and a relative frequency histogram?",
+    o: ["The x-axis", "The y-axis", "The title", "The data"],
+    a: 1
+  },
+  {
+    q: "What is the purpose of a data list?",
+    o: ["To display data distribution", "To summarize data", "To identify trends", "To present data in a clear and concise manner"],
+    a: 3
+  },
+  {
+    q: "What is the purpose of set notation?",
+    o: ["To display data distribution", "To summarize data", "To identify trends", "To present data in a clear and concise manner"],
+    a: 3
+  },
+  {
+    q: "What is the difference between a population and a sample?",
+    o: ["A population is a subset of a sample", "A sample is a subset of a population", "A population is a type of data, while a sample is a type of analysis", "A population is a type of analysis, while a sample is a type of data"],
+    a: 1
+  },
+  {
+    q: "What is the purpose of statistics?",
+    o: ["To collect data", "To analyze data", "To interpret data", "To make informed decisions"],
+    a: 3
+  },
+  {
+    q: "What is the primary goal of statistics?",
+    o: ["To collect data", "To analyze data", "To interpret data", "To make informed decisions"],
+    a: 3
+  },
+  {
+    q: "What is a population in statistics?",
+    o: ["A subset of data", "A collection of data", "A sample of data", "A statistical measure"],
+    a: 1
+  },
+  {
+    q: "What is a sample in statistics?",
+    o: ["A subset of a population", "A collection of data", "A statistical measure", "A type of data"],
+    a: 0
+  },
+  {
+    q: "What is the difference between a parameter and a statistic?",
+    o: ["A parameter is a population measure, while a statistic is a sample measure", 
+        "A parameter is a sample measure, while a statistic is a population measure", 
+        "A parameter is a type of data, while a statistic is a type of analysis", 
+        "A parameter is a type of analysis, while a statistic is a type of data"],
+    a: 0
+  },
+  {
+    q: "What is the purpose of descriptive statistics?",
+    o: ["To make predictions about a population", "To summarize and describe data", "To test hypotheses", "To identify trends"],
+    a: 1
+  },
+  {
+    q: "What is the purpose of inferential statistics?",
+    o: ["To summarize and describe data", "To make predictions about a population", "To test hypotheses", "To identify trends"],
+    a: 1
+  },
+  {
+    q: "What is a stem-and-leaf plot used for?",
+    o: ["To display data distribution", "To summarize data", "To identify trends", "To test hypotheses"],
+    a: 0
+  },
+  {
+    q: "What is a frequency histogram used for?",
+    o: ["To display data distribution", "To summarize data", "To identify trends", "To test hypotheses"],
+    a: 0
+  },
+  {
+    q: "What is a relative frequency histogram used for?",
+    o: ["To display data distribution", "To summarize data", "To identify trends", "To compare frequencies"],
+    a: 3
+  },
+  {
+    q: "What is the mean of a data set?",
+    o: ["The middle value", "The most frequent value", "The average value", "The sum of the values"],
+    a: 2
+  },
+
+
+  /* ----------- CONTINUES ---------- */
+  /* Due to ChatGPT message limits, I will continue below. */
+];
+
+
+//end
+
+
+
+/* ─────────────────────────
+    RANDOMIZE QUESTIONS
+─────────────────────────── */
+questions = questions.sort(() => Math.random() - 0.5);
+
+let currentIndex = 0;
+
+
+/* ──────────── STORE USER ANSWERS ──────────── */
+let userAnswers = {};  
+// example: userAnswers[3] = 2  → Question 3, option index 2 selected
+
+/* ─────────── DISPLAY QUESTION (with stored answers) ─────────── */
+function showQuestion() {
+    let q = questions[currentIndex];
+    let container = document.getElementById("questionContainer");
+
+    container.innerHTML = `
+        <div class="question-box">
+            <p><b>${currentIndex + 1}. ${q.q}</b></p>
+            ${q.o.map((opt, i) => `
+                <label>
+                    <input type="radio" name="q${currentIndex}"
+                        value="${i}"
+                        ${userAnswers[currentIndex] === i ? "checked" : ""}>
+                    ${opt}
+                </label><br>
+            `).join("")}
+        </div>
+    `;
+
+    // Save answer automatically when clicking
+    document.querySelectorAll(`input[name="q${currentIndex}"]`).forEach(radio => {
+        radio.addEventListener("change", function() {
+            userAnswers[currentIndex] = parseInt(this.value);
+        });
+    });
+}
+
+/* ─────────── NEXT / PREVIOUS — Keeps Answers Saved ─────────── */
+function nextQuestion() {
+    if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        showQuestion();
+    }
+}
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+    }
+}
+
+/* ─────────── SUBMIT: Score Only Based on Answered Questions ─────────── */
+function submitQuiz() {
+    let score = 0;
+    let answeredQuestions = Object.keys(userAnswers).length;
+    let details = "";
+
+    for (let index in userAnswers) {
+        index = parseInt(index);
+        let q = questions[index];
+        let userAnswer = userAnswers[index];
+
+        if (userAnswer === q.a) score++;
+
+        details += `
+            <p>
+                <b>${index + 1}. ${q.q}</b><br>
+                <span class="${userAnswer === q.a ? 'correct-answer' : 'incorrect-answer'}">
+                    Your answer: ${q.o[userAnswer]}
+                </span><br>
+                <span class="correct-answer">Correct answer: ${q.o[q.a]}</span>
+            </p><hr>
+        `;
+    }
+
+    if (answeredQuestions === 0) {
+        details = "<p>You did not answer any question.</p>";
+    }
+
+    document.getElementById("result").style.display = "block";
+    document.getElementById("result").innerHTML = `
+        <h2>Answered: ${answeredQuestions} / ${questions.length}</h2>
+        <h2>Your Score: ${score}</h2><br>
+        ${details}
+    `;
+}
+
+/* ─────────── TIMER (unchanged) ─────────── */
+let timeLeft = 60 * 60;
+function countdown() {
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+
+    document.getElementById("time").innerHTML =
+        `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+    if (timeLeft <= 0) {
+        submitQuiz();
+        document.getElementById("timer").style.background = "red";
+        return;
+    }
+    timeLeft--;
+    setTimeout(countdown, 1000);
+}
+countdown();
+
+/* ─────────── SHOW FIRST QUESTION ─────────── */
+showQuestion();
+
+
+</script>
+
+</body>
+</html>
